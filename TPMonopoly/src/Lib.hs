@@ -15,7 +15,6 @@ type Precio    = Int
 type Accion    = Participante -> Participante
 type Ganador   = Participante
 
-
 pepe :: Participante
 pepe = (UnParticipante "Pepito" 500 "ser" [("pocilga",10),("casucha",30),("finca",300)] [pasarPorElBanco,pagarAAccionistas,enojarse])
 
@@ -42,19 +41,17 @@ gritar :: Accion
 gritar participante = participante {nombre = "AHHHH" ++ nombre participante}
 
 subastar :: Propiedad -> Accion
-subastar (nombre,precio) participante 
-  | elem (tacticaDeJuego  participante) ["Oferente Singular","Accionista"] = modificarDinero (-precio).agregarPropiedad (nombre,precio) $ participante 
+subastar propiedadEnSubasta participante 
+  | elem (tacticaDeJuego  participante) ["Oferente Singular","Accionista"] = modificarDinero (- snd propiedadEnSubasta).agregarPropiedad propiedadEnSubasta $ participante 
   | otherwise = participante
 agregarPropiedad :: Propiedad -> Participante -> Participante
-agregarPropiedad (nombre,precio) participante = participante {propiedadesCompradas = propiedadesCompradas participante ++ [(nombre,precio)]}
+agregarPropiedad propiedadGanada participante = participante {propiedadesCompradas = propiedadesCompradas participante ++ [propiedadGanada]}
 
--- ¿COMO SERIA POSIBLE CON COMPOSICION?
 cobrarAlquileres :: Accion
-cobrarAlquileres participante = modificarDinero ((10*cantidadPropiedadesBaratas participante) + (20*cantidadPropiedadesCaras participante)) participante
---cobrarAlquileres participante = modificarDinero.((+ 20*cantidadPropiedadesCaras).(10*cantidadPropiedadesBaratas)) $ participante --)) participante
+cobrarAlquileres participante = modificarDinero (((*10).cantidadPropiedadesBaratas $ participante) + ((*20).cantidadPropiedadesCaras $ participante)) participante
 
 cantidadPropiedades :: (Int -> Bool) -> Participante -> Int
-cantidadPropiedades condicion = length.(filter condicion).(map snd).propiedadesCompradas
+cantidadPropiedades condicion = length.filter condicion.map snd.propiedadesCompradas
 cantidadPropiedadesBaratas :: Participante -> Int
 cantidadPropiedadesBaratas participante = cantidadPropiedades (<150) participante
 cantidadPropiedadesCaras :: Participante -> Int
@@ -63,27 +60,23 @@ cantidadPropiedadesCaras participante = cantidadPropiedades (>=150) participante
 pagarAAccionistas :: Accion
 pagarAAccionistas participante
   | tacticaDeJuego participante == "Accionista" = modificarDinero (200) participante
-  | otherwise                                   = modificarDinero (-100) participante
+  | otherwise                                   = modificarDinero (- 100) participante
 
 hacerBerrinchePor :: Propiedad -> Accion
 hacerBerrinchePor propiedad participante
-  | snd propiedad > cantidadDeDinero participante = (hacerBerrinchePor propiedad).(modificarDinero 10).gritar $ participante
+  | snd propiedad > cantidadDeDinero participante = hacerBerrinchePor propiedad.modificarDinero 10.gritar $ participante
   | otherwise                                     = agregarPropiedad propiedad participante
 
 ultimaRonda :: Participante -> Accion
 ultimaRonda participante = foldl1 (.) (acciones participante)
--- ¿PODRIA DEVOLVER SOLO EL NOMBRE DEL GANADOR O TIENE QUE SER TODOS LOS DATOS DEL GANADOR? ¿COMO PODRIA APLICAR COMPOSICION?
+
 juegoFinal :: Participante -> Participante -> Ganador
 juegoFinal participante1 participante2
-  | cantidadDeDinero (ultimaRonda participante1 participante1) < cantidadDeDinero (ultimaRonda participante2 participante2) = participante2 -- ? cantidaDeDinero.(ultimaRonda participante) $ participante
+  | cantidadDeDinero (ultimaRonda participante1 participante1) < cantidadDeDinero (ultimaRonda participante2 participante2) = participante2
   | otherwise                                                                               = participante1
 
-esPropiedad :: Propiedad -> String
-esPropiedad propiedad
-  | snd propiedad < 150 = "Barata"
-  | otherwise           = "Cara"
-esPropiedadBarata :: Propiedad -> Bool
-esPropiedadBarata propiedad = snd propiedad < 150
-esPropiedadCara = not.esPropiedadBarata
+propiedadBarata :: Propiedad
+propiedadBarata = ("Casita",30)
 
--- IDEA EXTRA: parametrizar alguna de las funciones agregarPropiedad, agregarAcciones, modificarDinero, cambiarTacticaDeJuego
+propiedadCara :: Propiedad
+propiedadCara = ("Casona",300)
