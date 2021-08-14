@@ -122,16 +122,6 @@ leGanaA(Ganador,Perdedor,Provincia):-
     intencionDeVotoEn(Provincia,OtroPartido,OtroPorcentaje),
     UnPorcentaje > OtroPorcentaje.
 
-/* PREDICADOS 
-candidato(Partido,Nombre,Edad)
-postulaProvincia(Partido,ListaProvincia)
-perteneceA(Provincia,Partido)
-cantidadHabitantes(Provincia,Cantidad)
-intencionDeVotoEn(Provincia, Partido, Porcentaje)
-compiteEn(Persona,Provincia,Partido)
-esPicante(Provincia)
-leGanaA(Ganador,Perdedor,Provincia)
-*/  
 
 % 4) EL GRAN CANDIDATO
 /*
@@ -148,18 +138,62 @@ esElMasJoven(UnCandidato):-
     candidato(UnPartido,UnCandidato,Edad),
     forall(candidato(UnPartido,_,OtraEdad),(Edad =< OtraEdad)).
 
+esElMasJovenDe(UnCandidato,UnPartido):-
+    candidato(UnPartido,UnCandidato,Edad),
+    forall(candidato(UnPartido,_,OtraEdad),(Edad =< OtraEdad)).
+
+% rojo gana en bsas, santafe, cordoba, chubut, tierra del fuego, san luis (todas en las que se postula)
+% azul gana en chaco, neuquen (se postula tmb en bsas, tierra del fuego y san luis )
+% amarillo gana en formosa, tucuman, salta, santa cruz, la pampa, corrientes, misiones (tmb se postula en chaco y buenos aires)
+ganaEnTodas(UnPartido):-
+    postulaProvincia(UnPartido,_),
+    forall(perteneceA(Provincia,UnPartido),partidoGanador(UnPartido,Provincia)).
+
+partidoGanador(UnPartido,Provincia):-
+    candidato(_,UnCandidato,_),
+    compiteEn(UnCandidato,Provincia,_),
+    forall(compiteEn(OtroCandidato,Provincia,_),leGanaA(UnCandidato,OtroCandidato,Provincia)),
+    pertenecenAlMismoPartido(UnCandidato,OtroCandidato,UnPartido).
+
+pertenecenAlMismoPartido(UnaPersona,OtraPersona,UnPartido):-
+    candidato(UnPartido,UnaPersona,_),
+    candidato(UnPartido,OtraPersona,_),
+    UnaPersona \= OtraPersona.    
+
+elGranCandidato(UnCandidato):-
+    esElMasJovenDe(UnCandidato,UnPartido),
+    ganaEnTodas(UnPartido).
+
+/* NO SIRVE por ej: el rojo no gana pero se postula en santafe y cordoba. Gana y no se postula en chaco, neuquen, formosa, tucuman, corrientes y misiones
+ganaEnTodas(UnPartido):-
+    postulaProvincia(UnPartido,_),
+    forall(perteneceA(Provincia,UnPartido),partidoGanadorSegunVotos(UnPartido,Provincia)). */
+
+
+    /* PREDICADOS 
+    candidato(Partido,Nombre,Edad)
+    postulaProvincia(Partido,ListaProvincia)
+    perteneceA(Provincia,Partido)
+    cantidadHabitantes(Provincia,Cantidad)
+    intencionDeVotoEn(Provincia, Partido, Porcentaje)
+    compiteEn(Persona,Provincia,Partido)
+    esPicante(Provincia)
+    leGanaA(Ganador,Perdedor,Provincia)
+    */  
+
 % 5) MALAS CONSULTORAS
-/*La consultora cometió un error al pasarnos los resultados de las encuestas. Para eso, realizaremos el predicado ajusteConsultora/3, el cual relaciona un partido, una provincia y el verdadero porcentaje de votos, los cuales se ajustarán de la siguiente manera:
+partidoGanadorSegunVotos(UnPartido,Provincia):-
+    intencionDeVotoEn(Provincia,UnPartido,Intencion),
+    forall(intencionDeVotoEn(Provincia,_,OtraIntencion), Intencion >= OtraIntencion).
 
-Si el partido, según la intención de voto, ganaba en la provincia, se le resta 20%.
-En otro caso, se le suma 5%
+ajusteConsultora(UnPartido,Provincia,VerdaderoPorcentajeDeVotos):-
+    partidoGanadorSegunVotos(UnPartido,Provincia),
+    intencionDeVotoEn(Provincia,UnPartido,FalsoPorcentajeDeVotos),
+    VerdaderoPorcentajeDeVotos is FalsoPorcentajeDeVotos - 20.
 
-Por ejemplo
-La intención de voto del partido rojo en Buenos Aires quedaría en 20
-La intención de voto del partido azul en Neuquén quedaría en 15
-
-Si ahora quisiéramos evaluar todos los predicados con los valores reales de votos, ¿Qué cambios deberíamos hacer? ¿Cuántos predicados deberíamos modificar?
-*/
+ajusteConsultora(UnPartido,Provincia,VerdaderoPorcentajeDeVotos):-
+    intencionDeVotoEn(Provincia,UnPartido,FalsoPorcentajeDeVotos),
+    VerdaderoPorcentajeDeVotos is FalsoPorcentajeDeVotos + 5.
 
 % 6) PROMESAS DE CAMPAÑA
 % promete(Partido,PromesaCampaña)
@@ -170,6 +204,12 @@ promete(amarillo,nuevosPuestosDeTrabajo(10000)).
 promete(amarillo,inflacion(1,15)).
 promete(rojo,nuevosPuestosDeTrabajo(800000)).
 promete(rojo,inflacion(10,30)).
+
+/* OTRA VERSION
+promete(azul,[construir([edilicio(hospital,1000),edilicio(jardin,100),edilicio(escuela,5)]),inflacion(2,4)]).
+promete(rojo,[nuevosPuestosDeTrabajo(800000),inflacion(10,30)]).
+promete(amarillo,[construir([edilicio(hospital,100),edilicio(universidad,1),edilicio(comisaria,200),nuevosPuestosDeTrabajo(10000),inflacion(1,15)].
+*/
 
 % 7) AJUSTES DE BOCA DE URNA
 /* Para la inflación, la intención de votos disminuirá de manera directamente proporcional al 
@@ -195,7 +235,7 @@ ajusteSegunPromesa(inflacion(CotaInferior,CotaSuperior),Ajuste):-
 ajusteSegunPromesa(nuevosPuestosDeTrabajo(Cantidad),3):-
     promete(_,nuevosPuestosDeTrabajo(Cantidad)),
     Cantidad > 50000.
-% si es menor esta okey que responda false o deberia responder por 0
+% si es menor esta okey que responda false o deberia responder por 0?
 % otra cantidad : ajusteSegun(nuevosPuestosDeTrabajo(Cantidad),0) es necesario para parcial inversible?
 
 ajusteSegunPromesa(construir(ListaEdilicios),Variacion):-
