@@ -1,6 +1,7 @@
 % El Kisokito  2020                https://docs.google.com/document/d/1RNgFMlSqOKiwe9SEi1U2cQjCmdFfWNflqycSfp7Qa-w/edit#heading=h.8z5fk89ui0rg
 % Posible solucion (not found)      https://github.com/pdep-mn-utn/parcial-kioskito-pl
 
+% 1) CALENTANDO MOTORES
 atiende(dodain,lunes,9,15).
 atiende(dodain,miercoles,9,15).
 atiende(dodain,viernes,9,15).
@@ -19,25 +20,82 @@ atiende(vale,Dia,Inicio,Fin):-
 comparteCon(dodain).
 comparteCon(juanC).
 
+% 2) QUIÉN ATIENDE EL KIOSKO
 atendidoPor(Dia,Hora,Persona):-
   atiende(Persona,Dia,Inicio,Fin),
   between(Inicio,Fin,Hora).
 
-foreverAlone(UnaPersona,Dia,Hora):-
-  atendidoPor(UnaPersona,Dia,Hora),
+% 3) FOREVER ALONE
+foreverAlone(Persona,Dia,Hora):-
+  atendidoPor(Dia,Hora,Persona),
+  not(atiendenJuntos(Persona,_,Dia,Hora)).
+
+atiendenJuntos(UnaPersona,OtraPersona,Dia,Hora):-
+  atendidoPor(Dia,Hora,UnaPersona),
+  atendidoPor(Dia,Hora,OtraPersona),
+  UnaPersona \= OtraPersona.
+
+/* 
+foreverAlonePrimerIntento(UnaPersona,Dia,Hora):-
+  % atiende(UnaPersona,_,_,_),
+  atendidoPor(Dia,Hora,UnaPersona),
   forall(atiende(OtraPersona,_,_,_),not(atendidoPor(Dia,Hora,OtraPersona))).
-% no funciona dodain: el lunes a las 10 dodain no está forever alone, porque vale también está
 
+foreverAloneLara(UnaPersona,Dia,Hora):-
+  atendidoPor(_,_,UnaPersona),                                                  
+  forall(atendidoPor(Dia,Hora,UnaPersona),not(atendidoPor(Dia,Hora,_))). 
+
+- Como funciona foreverAloneLara
+primero se liga la variable Persona con un individuo, ej: julli
+antecedente: se encuentran todas las formas de probar que esto sea cierto (se generan todos los días y horas en los que atiende juli)           
+consecuente: para cada día y hora en los que atiende juli, comprueba que exista alguien que _no_ atiende en ese día y hora  
+
+LO QUE EN REALIDAD SE QUIERE SABER: es que para una persona en un día y hora, saber si no existe alguien más que atienda en ese horario (dia y hora particular). 
+- Entonces: la persona que queremos saber si es foreverAlone tiene que atender en ese día y hora particular. Por eso se LIGA dia, hora y persona.
+- Después:  para saber es si no existe alguien más que atienda en ese horario se podría hacer un predicado atiendenJuntos/4
+que relacione a una persona con otra persona que trabaja junto a ella en un día y hora en particular
+- De esa forma podemos decir que alguien es foreverAlone si atiende en un día y horario y no existe alguien que atienda junto a esa persona (desarrollo en funcionamiento)
+
+antecedente siempre falso para el caso de prueba (salvo lucas), entonces no importa el consecuente es verdadero para todos los que no son Lucas. 
+*/
+
+% 4) POSIBILIDADES DE ATENCIÓN
+% Dado un dia, queremos relacionar qué personas podrían estar atendiendo el kisko en algun momento de ese día. 
+% Queremos saber todas las posibilidades de atención de ese día. La única restricción es que la persona atienda ese día. 
+% Por ejemplo si preguntamos por el miercoles tiene que darnos estas combinatoria:
+    % nadie
+    % dodain solo
+    % dodain y leo
+    % dodain , vale, martu, leoC
+    % vale y martu,
+    % etc
+    % no puede aparecer lucas, por ejemplo, porque no atiende el miércoles
 posibilidadesAtencion(Dia,Personas):-
-  atendidoPor(Dia,Hora,_),
-  findall(Persona,atendidoPor(Dia,Hora,Persona),Personas).
-% no coincidden combinaciones
+  atiende(_,Dia,_,_),
+  findall(Persona,atiende(Persona,Dia,_,_),Personas).
+% no coincidden combinaciones: ?- posibilidadesAtencion(miercoles,Quien). --> Quien = [dodain, leoC, martu, vale] ;
 
+posibilidadesAtencion2(Dia,Equipo):-
+  atiende(_,Dia,_,_),
+  findall(Persona,atiende(Persona,Dia,_,_),Personas),
+  subset(Equipo,Personas).    % no inversible para primer argumento
+
+posibilidadesAtencion3(Dia,Equipo):-
+  atiende(_,Dia,_,_),
+  findall(Persona,atiende(Persona,Dia,_,_),Personas),
+  subConjunto(Personas,Equipo).
+
+subConjunto(_, []). 
+subConjunto([X|L], [A|NTail]):- 
+    member(A,[X|L]),  
+    subConjunto(L, NTail), 
+    not(member(A, NTail)). 
+
+% 5) VENTAS / SUERTUDAS
 % golosina(Valor)
-% cigarrillos(MarcaVendida)
+% cigarrillos(MarcasVendidas)
 % bebidas(alcoholica?,cantidad)
-
-venta(dodain,lunes10,[golosinas(1200),cigarrillos([jockey]),golosinas(50)).
+venta(dodain,lunes10,[golosinas(1200),cigarrillos([jockey]),golosinas(50)]).
 venta(dodain,miercoles12,[bebidas(alcoholica,8),bebidas(noAlcoholica,1),golosinas(10)]).
 venta(martu,miercoles12,[golosinas(1000),cigarrillos([chesterfield,colorado,parisiennes])]).
 venta(lucas,martes11,[golosinas(600)]).

@@ -1,7 +1,3 @@
-% VOCALOID 
-% Enunciado https://docs.google.com/document/d/1xbXPZnhwyK5FSHR_oaXU4esfkTd2S-jf3rH1XLw864M/edit
-% Posible solucion https://docs.google.com/document/d/1RAvv1IpmmV9wneiLabE6LNo42JAMWxuYWvZd5TYq4vU/edit
-
 % WHO YOUY GONNA CALL
 % Eunciado https://docs.google.com/document/d/1GBORNTd2fujNy0Zs6v7AKXxRmC9wVICX2Y-pr7d1PwE/edit
 % Posible solucion https://github.com/pdep-mit/ejemplos-de-clase-prolog/commit/60f4cd6227ab868b9476263836e143c4d66762f3
