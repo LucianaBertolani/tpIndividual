@@ -99,8 +99,8 @@ combinacionesPosiblesDeJugada(Jugador,Combinacion):-
     conjuntoPartes(Cartas,Combinacion),
     puedeJugarCombinacion(Jugador,Combinacion).
 
-% conjuntoPartes(Conjunto,Particiones)
-% puedeJugarCombinacion(Jugador,Combinacion):-
+% conjuntoPartes(Conjunto,Particiones)     --> BUSCAR EN INTERNET
+% puedeJugarCombinacion(Jugador,Combinacion):-  --> NO FUNCIONA COMO DEBERIA
 %    mana(Jugador,ManaAT),
 %    pierdePuntosMana(Combinacion,PuntosPerdidos),
 %    ganarPuntosMana(Jugador,JugadorDT, -PuntosPerdidos),

@@ -1,0 +1,33 @@
+import Superheroes.*
+
+describe "Tests de Batman" {
+
+	test "batman siempre tiene mucho poder" {
+		assert.that(batman.tieneMuchoPoder())
+	}
+	test "batman comienza con 100 de energía" {
+		assert.equals(100, batman.energia())
+	}
+	test "batman pierde de energía la mitad de los minutos que entrena" {
+		batman.entrenar(50)
+		assert.equals(75, batman.energia())
+	}
+	test "batman no queda con energia negativa aunque entrene mucho tiempo" {
+		batman.entrenar(10000000)
+		assert.equals(0, batman.energia())
+	}
+}
+
+describe "Tests de la Mujer Maravilla" {
+	test "la mujer maravilla comienza con 500 de energia" {
+		assert.equals(500, mujerMaravilla.energia())
+	}
+	test "la Mujer Maravilla tiene un ford cuando se latinoamericaniza" {
+		mujerMaravilla.latinoamericanizar()
+		assert.that(mujerMaravilla.armasDeCombate().contains("ford taunus invisible"))
+	}
+	test "la Mujer Maravilla deja de tener su avion cuando se latinoamericaniza" {		
+		mujerMaravilla.latinoamericanizar()
+		assert.notThat(mujerMaravilla.armasDeCombate().contains("avion invisible"))
+	}
+}

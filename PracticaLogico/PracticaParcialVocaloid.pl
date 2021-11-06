@@ -61,6 +61,7 @@ concierto(mikuExpo,estadosUnidos,2000,gigante(2,6)).
 concierto(magicalMirai,japon,3000,gigante(3,10)).
 concierto(vocalektVisions,estadosUnidos,1000,mediano(9)).
 concierto(mikuFest,argentina,100,pequenio(4)).
+% en caso de que un nombre de concierto pueda realizarse en distintos lugares con distinta fama, separar el tipo de concierto segun el nombre
 
 % 4) Se requiere saber si un vocaloid puede participar en un concierto, esto se da cuando cumple los requisitos del tipo de concierto. 
 % También sabemos que Hatsune Miku puede participar en cualquier concierto.

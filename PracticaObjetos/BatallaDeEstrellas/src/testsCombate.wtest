@@ -1,0 +1,42 @@
+import Jugadores.*
+
+describe "Test de Pamela, la doctora" {
+
+	test "Pamela comienza con 6400 puntos de energia" {
+		assert.equals(6400, pamela.energia())
+	}
+	test "Los elementos que tiene Pamela en su botiquin son algodon,agua oxigenada y dos cintas de papel"{
+		assert.equals(#{"algodon", "agua oxigenada", "cinta de papel", "cinta de papel"}, pamela.equipamiento().asSet())
+	}
+}
+
+describe "Test de Pocardo, el musicoterapeuta" {
+
+	test "Pocardo comienza con 5600 puntos de energia" {
+		assert.equals(5600, pocardo.energia())
+	}
+	test "Los elementos que tiene Pocardo en su botiquin son guitarra, curitas y cotonetes"{
+		assert.equals(#{"guitarra", "curitas", "cotonetes"}, pocardo.equipamiento().asSet())
+	}
+}
+
+describe "Test de Tulipan, la guerrera" {
+
+	test "Tulipan comienza con 8400 puntos de energia" {
+		assert.equals(8400, tulipan.energia())
+	}
+	test "Los elementos que tiene Tulipan en su galpon son rastrillo, dos macetas y manguera"{
+		assert.equals(#{"rastrillo", "maceta", "maceta", "manguera"}, tulipan.equipamiento().asSet())
+	}
+}
+
+
+describe "Test de Toro, el tanque" {
+
+	test "Toro comienza con 7800 puntos de energia" {
+		assert.equals(7800, toro.energia())
+	}
+	test "Toro no tiene elementos en su botin"{
+		assert.equals(#{}, toro.equipamiento().asSet())
+	}
+}

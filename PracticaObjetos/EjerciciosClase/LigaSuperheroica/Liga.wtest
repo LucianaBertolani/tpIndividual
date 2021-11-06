@@ -1,0 +1,23 @@
+import Liga.*
+import Superheroes.*
+
+describe "Tests de la agrupación superheroica" {
+
+	const integrantes = #{ elZorro, batman, mujerMaravilla } // al igual que los objetos un describe puede tener atributos y metodos que permiten abstraer logica repetida
+	method cargarIntegrantes() {
+		integrantes.forEach({ integrante => agrupacionSuperHeroica.agregarSuperHeroe(integrante)})
+	}
+	
+	test "la agrupación comienza vacía" {
+		assert.equals(0, agrupacionSuperHeroica.cantidadDeIntegrantes())
+	}
+	test "si agregamos a el zorro, batman y la mujer maravilla, la agrupación tiene 3 integrantes" {	
+		self.cargarIntegrantes()
+		assert.equals(3, agrupacionSuperHeroica.cantidadDeIntegrantes())
+	}
+	test "si le pedimos las identidades secretas a la agrupacion nos las devuelve" {	
+		self.cargarIntegrantes()
+		const identidades = #{elZorro.identidadSecreta(), batman.identidadSecreta() , mujerMaravilla.identidadSecreta()} 
+		assert.equals(identidades, agrupacionSuperHeroica.identidadesSecretas().asSet())
+	}
+}

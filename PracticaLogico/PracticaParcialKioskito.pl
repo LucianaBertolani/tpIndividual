@@ -1,5 +1,5 @@
 % El Kisokito  2020                https://docs.google.com/document/d/1RNgFMlSqOKiwe9SEi1U2cQjCmdFfWNflqycSfp7Qa-w/edit#heading=h.8z5fk89ui0rg
-% Posible solucion (not found)      https://github.com/pdep-mn-utn/parcial-kioskito-pl
+% Posible solucion                 https://github.com/pdep-utn/kioskito-prolog/blob/master/kioskito.pl
 
 % 1) CALENTANDO MOTORES
 atiende(dodain,lunes,9,15).

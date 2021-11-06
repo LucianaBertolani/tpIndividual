@@ -1,0 +1,18 @@
+import Destinos.*
+import Paquetes.*
+import Mensajeros.*
+
+describe "Pruebas paquetes" {
+
+	test " tests El paqueton con dos destinos y pagos de 200 esta pago" {
+		paqueton.destinos([laMatrix,puenteDeBrooklyn])
+		paqueton.pagar(200)
+		paqueton.pagar(200)
+		assert.that(paqueton.estaPago())
+	}
+	test "tests El paqueton con dos destinos, si paga menos de 200 no esta pago" {
+		paqueton.destinos([laMatrix,puenteDeBrooklyn])
+		paqueton.pagar(100)
+		assert.notThat(paqueton.estaPago())
+	}
+}
