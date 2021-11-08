@@ -1,0 +1,17 @@
+class Expedicion{
+	
+	const aldeasInvolucradas = #{}
+	const capitalesInvolucradas = #{}
+	
+	const vikingos = #{}
+
+ 	method valeLaPena() = aldeasYzonasInvolucradas.forEach{aldeaOCapital => aldeaOCapital.botinValioso()}
+ 	
+ 	// method todasLasCapitalesValenLaPena() = capital
+	method invadir(aldeasocapital)
+	method subirVikingoExpedicion(unVikingo){
+		if (!unVikingo.puedeSubirExpedicion())
+			throw new Exception(message = "El vikingo no puede subir a la expedicion" )
+		vikingos.add(unVikingo)
+	}
+}

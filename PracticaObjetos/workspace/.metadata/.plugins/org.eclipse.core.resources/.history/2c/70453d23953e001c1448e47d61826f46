@@ -1,4 +1,4 @@
 class Zona{
 	const property nombre
-	const property valorZona
+	const property precio
 }

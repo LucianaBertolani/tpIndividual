@@ -1,0 +1,13 @@
+class Zona {
+	const property velocidadMaxPermitida
+	const usuariosEnTransito
+	const controles
+	
+	method activarControles(){
+		usuariosEnTransito.forEach({usuarioEnTransito => self.controlarUsuario(usuarioEnTransito)})
+	}
+	method controlarUsuario(unUsuario){
+		controles.forEach({unControl => unControl.controlar(unUsuario, self)})
+	}
+	method cantUsuariosEnTransito() = usuariosEnTransito.size() // sobredelegacion o encapsulamiento?
+}

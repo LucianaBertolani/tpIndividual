@@ -1,0 +1,27 @@
+class Empleado{
+	const operacionesReservadas = #{}
+	const operacionesConcretadas = #{}
+	
+	method realizarOperacion(unaOperacion)
+	
+	// metodos para  criterios de  mejorEmpleado
+	method totalComisiones() = operacionesConcretadas.sum({unaOperacion => unaOperacion.costoComision()})
+	method cantOperacionesConcretadas() = operacionesConcretadas.size()
+	method cantReservas() = operacionesReservadas.size()
+
+	method concretarOperacion(unaOperacion){
+		// operacionesReservadas.remove(unaOperacion)
+		operacionesConcretadas.add(unaOperacion)
+	}
+
+	method leChoreoLaReserva(otroEmpleado) = 
+		operacionesReservadas.any({unaOperacion => unaOperacion.fueConcretadaPor(otroEmpleado)})
+		
+	method cerraronOperacionesEnLaMismaZona(otroEmpleado) =
+		!(self.zonasDondeConcreta()).intersection(otroEmpleado.zonasDondeConcreta()).isEmpty()
+	
+	method zonasDondeConcreta() = operacionesConcretadas.map({unaOperacion => unaOperacion.zona()}).asSet()
+		
+	// deberia estar tieneProblemasCon(otroEmpleado) ???
+}
+

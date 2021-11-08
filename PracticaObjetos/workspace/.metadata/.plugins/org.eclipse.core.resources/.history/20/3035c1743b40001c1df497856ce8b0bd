@@ -1,0 +1,20 @@
+class Vikingo{
+	const casta
+
+	method esProductivo()
+	method tieneArmas()
+	method cobrarVida(defensor)
+	method ascenderCasta()
+	method puedeSubirExpedicion()
+}
+
+class Soldado inherits Vikingo{
+	var vidasCobradas
+
+
+}
+
+class Granjero inherits Vikingo{
+	const cantHijos
+	const cantHectarias
+}

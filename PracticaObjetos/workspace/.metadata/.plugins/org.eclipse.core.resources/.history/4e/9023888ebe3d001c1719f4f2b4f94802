@@ -1,0 +1,42 @@
+class Usuario {
+	const nombreUsuario
+	const dni
+	var dinero
+	const property vehiculo
+	const multas
+	
+	method recorrerDistancia(unaDistancia) {
+		vehiculo.recorrerKilometros(unaDistancia)
+	}
+	method cargarCombustible(unaCantidad){
+		// if (self.tieneSuficienteDinero(unaCantidad * 40)) -> QUE EL COSTO SE ENCARGUE EL VEHICULO
+		if (self.tieneSuficienteDinero(vehiculo.costoCombustible(unaCantidad)))
+		vehiculo.cargarTanque(unaCantidad)		
+	}
+	method tieneSuficienteDinero(unaCantidad) = dinero >= unaCantidad
+	
+	method pagar(unaCantidad){
+		if (self.tieneSuficienteDinero(unaCantidad)){
+			dinero -= unaCantidad 
+		} else {
+			throw new ExcepcionDineroInsuficiente(message = "El dinero disponible es insuficiente para pagar")
+		}
+	}
+	method pagarMulta(unaMulta){
+		self.pagar(unaMulta.costo())
+		unaMulta.multaPagada(true)
+	}
+	method romperReglas(unaMulta){
+		multas.add(unaMulta)
+	}
+	method puedeCircular(unaFecha){
+		return (dni.last().odd() and unaFecha.day().odd()) or (dni.last().even() and unaFecha.day().even()) 
+		// delegar metodos diaydnipares or diaydniimpares
+	}
+	method esComplicado() =	self.totalMultasSinPagar() > 5000
+	
+	method totalMultasSinPagar() = 
+		multas.filter({unaMulta => !unaMulta.multaPagada()}).sum({multaSinPagar => multaSinPagar.costo()})
+}
+
+class ExcepcionDineroInsuficiente inherits Exception {}

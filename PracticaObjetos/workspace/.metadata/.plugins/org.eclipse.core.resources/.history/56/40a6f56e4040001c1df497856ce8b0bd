@@ -1,0 +1,13 @@
+class CastaSocial {
+	const property castaSiguiente
+	
+ 	method tienePermitidoSubirDeExpedicion(unVikingo) = true
+}
+const castaJarl = new CastaSocial(castaSiguiente = castaKarl)
+const castaKarl = new CastaSocial(castaSiguiente = castaThrall)
+
+object castaThrall{
+	method castaSiguiente() = throw new Exception(message = "No hay castas superiores")
+	method tienePermitidoSubirDeExpedicion(unVikingo) = !unVikingo.tieneArmas() 
+}
+

@@ -1,0 +1,20 @@
+object inmobiliaria{
+	const operaciones = #{}
+	const empleados = #{}
+	
+	// method elMejorEmpleado(criterio) = empleados.max({unEmpleado => unEmpleado.criterio()})
+	// method elMejorEmpleado(criterio) = empleados.max({unEmpleado => criterio.criterio(unEmpleado)})
+	 
+	method elMejorEmpleadoSegunComisiones() = empleados.max({unEmpleado => unEmpleado.totalComisiones()})
+	method elMejorEmpleadoSegunReservas() = empleados.max({unEmpleado => unEmpleado.cantReservas()})
+	method elMejorEmpleadoSegunConcretas() = empleados.max({unEmpleado => unEmpleado.cantOperacionesCerradas()})
+	
+	method tienenProblemas(unEmpleado, otroEmpleado) = 
+		unEmpleado.cerraronOperacionesEnLaMismaZona(otroEmpleado) and unEmpleado.leChoreoLaReserva(otroEmpleado)
+							or
+		otroEmpleado.cerraronOperacionesEnLaMismaZona(unEmpleado) and otroEmpleado.leChoreoLaReserva(unEmpleado)
+}
+
+// object criterioComisiones{
+	// method criterio(unEmpleado) = unEmpleado.totalComisiones()
+// }

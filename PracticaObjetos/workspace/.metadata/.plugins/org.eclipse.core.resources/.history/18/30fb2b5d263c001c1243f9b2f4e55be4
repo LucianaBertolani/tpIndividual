@@ -1,0 +1,23 @@
+import BarrileteCosmico.*
+
+
+object empresarial{
+	method elegirTransporte(unUsuario,unaDistancia) = barrileteCosmico.transporteMasRapido(barrileteCosmico.transportes())	 
+	
+}
+
+object estudiantil{
+	
+	method transportesQuePuedePagar(unUsuario,unaDistancia){
+	return barrileteCosmico.transportes().filter({unTransporte => unUsuario.puedePagar(unTransporte.precioPorKilometro() * unaDistancia)})		
+	}
+
+	method elegirTransporte(unUsuario,unaDistancia){
+	return barrileteCosmico.transporteMasRapido(self.transportesQuePuedePagar(unUsuario,unaDistancia))
+	}
+}
+
+object grupoFamiliar{
+
+    method elegirTransporte(unUsuario,unaDistancia) = barrileteCosmico.transportes().anyOne()	
+}

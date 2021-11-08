@@ -1,0 +1,27 @@
+class Empleado{
+	const operacionesReservadas = #{}
+	const operacionesConcretadas = #{}
+	const enemigos = #{}
+	
+	method realizarOperacion(unaOperacion)
+
+	method totalComisiones() = operacionesConcretadas.sum({unaOperacion => unaOperacion.costoComision()})
+	method cantOperacionesConcretadas() = operacionesConcretadas.size()
+	method cantReservas() = operacionesReservadas.size()
+
+	method concretarOperacion(unaOperacion){
+		operacionesReservadas.remove(unaOperacion)
+		operacionesConcretadas.add(unaOperacion)
+	}
+
+	method tieneProblemasCon(otroEmpleado) = enemigos.contains(otroEmpleado)
+	/* cerraronOperacionesEnLaMismaZona and
+	 * leChoreoLaReserva
+	 */
+	method cerraronOperacionesEnLaMismaZona(otroEmpleado) =
+		!(self.zonasDondeConcreta()).intersection(otroEmpleado.zonasDondeConcreta()).isEmpty()
+	
+	method zonasDondeConcreta() = operacionesConcretadas.map({unaOperacion => unaOperacion.zona()})
+		
+}
+

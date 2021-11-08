@@ -1,0 +1,32 @@
+import BarrileteCosmico.*
+
+
+object empresarial{
+	method elegirTransporte(unUsuario,unaDistancia) = barrileteCosmico.transporteMasRapido(barrileteCosmico.transportes())	 
+	
+}
+
+object estudiantil{
+	/*
+	method transportesQuePuedePagar(unUsuario,unaDistancia){
+	return barrileteCosmico.transportes().filter({unTransporte => unUsuario.puedePagar(unTransporte.precioPorKilometro() * unaDistancia)})		
+	}
+
+	method elegirTransporte(unUsuario,unaDistancia){
+	return barrileteCosmico.transporteMasRapido(self.transportesQuePuedePagar(unUsuario,unaDistancia))
+	}
+	*/
+	method elegirTransporte(unUsuario,unaDistancia){
+		const transportesQuePuedePagar = unUsuario.transportesQuePuedePagarPara(unaDistancia) 
+		if (!transportesQuePuedePagar.isEmpty()){
+			// unUsuario.transportesQuePuedePagarPara(unaDistancia) != []
+		// return barrileteCosmico.transporteMasRapido(transportesQuePuedePagar)	
+	} else {
+		self.error("Todos los transportes son muy caros!!! No puede pagar ninguno")
+	}}
+}
+
+object grupoFamiliar{
+
+    method elegirTransporte(unUsuario,unaDistancia) = barrileteCosmico.transportes().anyOne()	
+}

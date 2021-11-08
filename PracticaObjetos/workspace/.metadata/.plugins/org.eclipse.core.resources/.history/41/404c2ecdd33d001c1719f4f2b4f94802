@@ -1,0 +1,45 @@
+// PENSAR REPETICION DE LOGICA O CODIGO??
+object controlDeVelocidad{
+	method controlar(unUsuario, unaZona){
+		if (unUsuario.vehiculo().superaVelocidad(unaZona.velocidadMaxPermitida())){
+			const multaCreada = new Multa(costo = 3000) // ES NECESARIO VARIABLE LOCAL???
+			unUsuario.romperReglas(multaCreada)
+			//unUsuario.romperReglas(new Multa(costo = 3000))
+		} 
+	}
+}
+
+object controlEcologico{
+	method controlar(unUsuario, unaZona){
+		if (!unUsuario.vehiculo().esEcologico()){
+			const multaCreada = new Multa(costo = 1500)
+			unUsuario.romperReglas(multaCreada)
+			//unUsuario.romperReglas(new Multa(costo = 1500))
+		} 
+	}
+}
+
+object controlRegulatorio{
+	method controlar(unUsuario, unaZona){
+		if (unUsuario.puedeCircular(new Date())){
+			const multaCreada = new Multa(costo = 2000)
+			unUsuario.romperReglas(multaCreada)
+			//unUsuario.romperReglas(new Multa(costo = 2000))
+		} 
+	}
+}
+
+
+class Multa{
+	var property costo
+	var property multaEstaPagada = false // a menos que se indique lo contrario, supongo que la multa no estará pagada
+	
+	method cobrarMulta(){
+		multaEstaPagada = true
+	}
+	
+	method retrasarPago(){
+		costo *= 1.1
+	}
+
+}

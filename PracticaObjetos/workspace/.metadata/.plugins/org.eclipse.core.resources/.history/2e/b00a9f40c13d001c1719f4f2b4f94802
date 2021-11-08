@@ -1,0 +1,40 @@
+class Vehiculo {
+	const capacidadTanque
+	var cantidadCombustible
+	const property velocidadPromedio
+	 
+	method recorrerKilometros(unaCantidad){
+		self.consumirLitrosCombustible(2)
+	}
+ 
+	method cargarTanque(unaCantidad){
+		// const loQueRealmenteCarga
+		cantidadCombustible = capacidadTanque.min(cantidadCombustible + unaCantidad)
+		// cobrar solo lo que carga
+	}
+	method consumirLitrosCombustible(unaCantidad){
+		cantidadCombustible = 0.max(cantidadCombustible - unaCantidad)
+	}
+	method esEcologico()
+	
+	method superaVelocidad(unaVelocidad) = velocidadPromedio >= unaVelocidad
+}
+
+class Camioneta inherits Vehiculo{
+	override method recorrerKilometros(unaCantidad){
+		self.consumirLitrosCombustible(4 + unaCantidad * 5)
+	}
+	override method esEcologico() = false
+}
+
+class Deportivo inherits Vehiculo{
+	override method recorrerKilometros(unaCantidad){
+		super(unaCantidad)
+		self.consumirLitrosCombustible(velocidadPromedio * 0.2)
+	}
+	override method esEcologico() = velocidadPromedio <= 120
+}
+
+class Familiar inherits Vehiculo{
+	override method esEcologico() = true
+}

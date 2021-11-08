@@ -1,0 +1,25 @@
+class Inmueble{
+	const property nombre
+	const property valor
+}
+
+class Casa inherits Inmueble{
+	
+}
+
+class PH inherits Inmueble{
+	
+}
+
+class Dpto inherits Inmueble{
+	
+}
+
+class LocalGalpon inherits Casa{
+	
+}
+
+class LocalALaCalle inherits Casa{
+	
+}
+

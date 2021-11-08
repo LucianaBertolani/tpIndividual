@@ -19,7 +19,7 @@ object venta{
 	method costoComision(inmueble) = porcentajeComision * inmueble.valorTotalInmueble()
 	method asignarComision(unPorcentaje){
 		porcentajeComision = unPorcentaje
-	} // porcentajeComision debería ser asignado por la Inmobiliaria
+	} // porcentajeComision asignado por la Inmobiliaria
 }
 
 class Reserva{

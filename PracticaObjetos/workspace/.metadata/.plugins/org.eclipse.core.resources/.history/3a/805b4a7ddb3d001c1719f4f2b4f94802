@@ -1,0 +1,83 @@
+class Usuario {
+	const nombreUsuario
+	const dni
+	var dinero
+	const property vehiculo
+	const multas
+	
+	method recorrerDistancia(unaDistancia) {
+		vehiculo.recorrerKilometros(unaDistancia)
+	}
+	method cargarCombustible(unaCantidad){
+		// if (self.tieneSuficienteDinero(unaCantidad * 40)) -> QUE EL COSTO SE ENCARGUE EL VEHICULO
+		if (self.tieneSuficienteDinero(vehiculo.costoCombustible(unaCantidad)))
+		vehiculo.cargarTanque(unaCantidad)		
+	}
+	/** OTRA OPCION
+	  method cargarNafta(unaCantidad) {
+      	const cuantoCarga = vehiculo.cuantoPuedeCargar(unaCantidad)
+    	self.pagar(cuantoCarga * 40)
+    	vehiculo.cargarCombustible(cuantoCarga)
+  	  } 
+	*/
+	method tieneSuficienteDinero(unaCantidad) = dinero >= unaCantidad
+	
+	method pagar(unaCantidad){
+		if (self.tieneSuficienteDinero(unaCantidad)){
+			dinero -= unaCantidad 
+		} else {
+			throw new ExcepcionDineroInsuficiente()
+		}
+	} // NO ES NECESARIO IF y ELSE. Si primero se lanza la excepcion corta el flujo de ejecucion
+	/** method pagar(unaCantidad) {
+       if(!self.leAlcanzaLaPlata(unaCantidad)) throw new Exception(message = "No me alcanza la plata!")
+        dinero -= unaCantidad
+  	}*/
+	
+	/* USAR serPagadaPor
+	method pagarMulta(unaMulta){
+		try{
+			self.pagar(unaMulta.costo())
+			multas.remove(unaMulta)
+			unaMulta.cobrarMulta()
+		} catch e : ExcepcionDineroInsuficiente(){
+			unaMulta.retrasarPago()
+			}
+	}*/// realmente es necesario caso particular pagarMulta??? --> SI, no solo se reduce el dinero
+	
+	/* method pagarMultas(){
+	 * 	multas.forEach({unaMulta => self.pagarMulta(unaMulta)})
+	 *  multas.forEach({unaMulta => unaMulta.serPagadaPor(self)})
+	 * } */
+	
+	method romperReglas(unaMulta){
+		multas.add(unaMulta)
+	}
+	/* OTRA OPCION para mayor delegacion en control
+	 * method multar(unMonto){
+	 *   multas.add(new Multa(costo = unMonto)
+	 * }
+	 */
+	/* method manejaEcologico() = vehiculo.esEcologico() --> MAYOR DELEGACION mayor delegacion en controles
+	 * method excedeLimiteDeVelocidad(unLimite) = vehiculo.velocidadPromedio() > unLimite --> MAYOR DELEGACION en controles
+	 */ 	
+	method puedeCircular(unaFecha){
+		return self.sonNumerosPares(unaFecha.day(), dni.last()) or 
+				self.sonNumerosImpares(unaFecha.day(),dni.last()) 
+		// (dni.last().odd() and unaFecha.day().odd()) or (dni.last().even() and unaFecha.day().even()) 
+	}
+	method sonNumerosPares(unNumero,otroNumero) = unNumero.even() and otroNumero.even()
+	method sonNumerosImpares(unNumero,otroNumero) = unNumero.odd() and otroNumero.odd()
+		
+	method esComplicado() =	self.deuda() > 5000
+	
+	method deuda() = self.multasSinPagar().sum({multaSinPagar => multaSinPagar.costo()}) // == totalMultasSinPagar()
+	method multasSinPagar() = multas.filter({unaMulta => !unaMulta.multaEstaPagada()})
+	
+	
+	// method totalMultasSinPagar() = DELEGAR PARA MAYOR EXPRESIVIDAD 
+		// multas.filter({unaMulta => !unaMulta.multaEstaPagada()}).sum({multaSinPagar => multaSinPagar.costo()})
+		
+}
+
+class ExcepcionDineroInsuficiente inherits Exception(message = "El dinero disponible es insuficiente para pagar") {}

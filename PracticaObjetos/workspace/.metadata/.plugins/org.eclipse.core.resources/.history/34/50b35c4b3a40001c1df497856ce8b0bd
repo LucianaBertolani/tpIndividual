@@ -1,0 +1,12 @@
+class CastaSocial {
+ 	method puedeIrDeExpedicion(unVikingo) = true
+}
+object castaThrall{
+	method puedeIrDeExpedicion(unVikingo) = !unVikingo.tieneArmas() 
+}
+
+
+
+// const castaJarl = new CastaSocial
+
+// const castaKarl = new CastaSocial

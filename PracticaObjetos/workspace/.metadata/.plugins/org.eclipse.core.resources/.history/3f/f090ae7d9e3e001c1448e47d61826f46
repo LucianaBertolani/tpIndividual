@@ -1,0 +1,32 @@
+class Operacion{
+	// concretada o en reserva ?
+	// alquiler o venta?
+	// inmueble.operacion()
+	
+}
+
+object alquiler{
+	var cantMesesAlquiler
+	
+	method costoComision(inmueble) = cantMesesAlquiler * inmueble.valorTotalInmueble() / 50000
+	method contratar(cantMesesAAlquilar) {
+		cantMesesAlquiler = cantMesesAAlquilar
+	}
+}
+
+object venta{
+	var porcentajeComision // asumimos porcentaje en decimales 
+	
+	method costoComision(inmueble) = porcentajeComision * inmueble.valorTotalInmueble()
+	method asignarComision(unPorcentaje){
+		porcentajeComision = unPorcentaje
+	}
+}
+
+class Reserva{
+	clienteQueReserva
+	empleadoQueReserva
+	empleadoQueConcreta
+	
+	
+}

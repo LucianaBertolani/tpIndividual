@@ -1,0 +1,12 @@
+object waza {
+	const usuarios = #{}
+	const zonas = #{}
+	
+//	method pedirPagarMultas() {
+//		usuarios.forEach({unUsuario = unUsuario.pagarMultas()})
+//	}
+	method laZonaMasTransitada() = zonas.max({unaZona => unaZona.cantUsuariosEnTransito()})
+	
+	method usuariosComplicados() =
+		usuarios.filter({unUsuario => unUsuario.esComplicado()})
+}

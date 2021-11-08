@@ -1,0 +1,60 @@
+import Localidades.*
+import BarrileteCosmico.*
+import Viajes.*
+import MediosDeTransportes.*
+import Perfiles.*
+
+class Usuario{
+    var nombreUsuario
+    const historialViajes = []
+    var  saldoDisponible
+    const usuariosSeguidos = #{} 
+    var property localidadOrigen  
+    var perfil
+	
+	method viajarA(localidadDestino){
+		const unViaje = barrileteCosmico.armarViaje(self, localidadDestino)
+		const costoViaje = unViaje.costoViaje()
+		if (self.puedePagar(costoViaje)){
+			self.localidadOrigen(localidadDestino)
+			historialViajes.add(unViaje)
+			self.pagar(costoViaje) }
+		else{
+			self.error("No posee los fondos necesarios, ya el viaje cuesta $" + costoViaje + " y solo posee $" + saldoDisponible + " disponibles en su cuenta")
+			}	
+		}
+	method puedePagar(unCosto) = saldoDisponible >= unCosto
+  
+    method pagar(unCosto){
+        saldoDisponible -= unCosto
+    } 
+    method kilometrosRecorridos() =	historialViajes.sum({ viaje => viaje.origen().distanciaA(viaje.destino())})
+        	
+    method seguirA(unUsuario){
+    	self.agregarSeguido(unUsuario)
+    	unUsuario.agregarSeguido(self)
+    }
+    method agregarSeguido(unUsuario){
+    	usuariosSeguidos.add(unUsuario)
+    }
+    
+		
+	method saldo() = saldoDisponible
+	
+	method seleccionarTransporte(unaDistancia){ 
+		return perfil.elegirTransporte(self,unaDistancia)
+	}
+	method transportesQuePuedePagarPara(unaDistancia){
+		return barrileteCosmico.transportes().filter({unTransporte => self.puedePagar(unTransporte.precioPorKilometro() * unaDistancia)})
+	}	
+}
+
+const pabloHari = new Usuario(
+	nombreUsuario = "PHari",
+    historialViajes = [new Viaje (origen = goodAirs , destino = lastToninas, transporte = trenThomas), new Viaje (origen = lastToninas , destino = goodAirs, transporte = buquebus)], 
+    saldoDisponible = 1500,
+    usuariosSeguidos = #{},
+    localidadOrigen = goodAirs,
+    perfil = estudiantil
+    )
+
